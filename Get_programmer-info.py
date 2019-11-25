@@ -33,7 +33,7 @@ def filterList():
 
 # 使用format格式化，出现$NF无法识别,待解决
 def filterprocess(PID):
-    command = "pwdx {PID}".format(PID)  + "|" + "awk '{print $NF}'"
+    command = "pwdx {PID}".format(PID=PID)  + "|" + "awk '{print $NF}'"
     workdir = getComStr(command)
     return workdir
 
