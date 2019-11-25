@@ -10,7 +10,7 @@ def getComStr(comand):
     return proStr
 
 def filterList():
-    command = 'netstat -tlnp | grep -v "tcpv6" | grep -v "master" | grep -v "cupsd" | grep -v "sshd" | grep -v "-"'
+    command = 'netstat -tlnp | grep -v "tcp6" | grep -v "master" | grep -v "cupsd" | grep -v "sshd" | grep -v "-"'
     tmpStr = getComStr(command)
     tmpList = tmpStr.split("\n")
     del tmpList[0:2]
