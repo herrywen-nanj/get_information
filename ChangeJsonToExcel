@@ -24,19 +24,26 @@ sheet["D1"] = "程序名称"
 
 def WritetoExcel():
     len_p,num = GetNumber()
-    for column in range(len_p):
-        # print(p[column]["A"])
-        sheet['A' + str(column + 2)] = str(p[column]["私网地址"])
-        sheet['B' + str(column + 2)] = str(p[column]["端口号"])
-        sheet['C' + str(column + 2)] = str(p[column]["工作路径"])
-        sheet['C' + str(column + 2)] = str(p[column]["程序名称"])
-        # for content in p:
-        #     sheet.cell(row=row,column=1).value = content["A"]
-        #     sheet.cell(row=row,column=2).value = content["B"]
-        #     sheet.cell(row=row,column=3).value = content["C"]
+    # print(len_p)
+    # print(num)
+    index = 0
+    # for j in range(len_p):
+    for j in range(len_p):
+        sheet['A' + str(j + 2)] = str(p[j]["私网地址"])
+        sheet['B' + str(j + 2)] = str(p[j]["端口号"])
+        sheet['C' + str(j + 2)] = str(p[j]["工作路径"])
+        sheet['D' + str(j + 2)] = str(p[j]["程序名称"])
+        wb.save(r"D:\123.xlsx")
+
+        # print(i)
+        # print(p[i-1]["私网地址"])
+        # sheet['A' + str(i + 2)] = str(p[i]["私网地址"])
+        # sheet['B' + str(i + 2)] = str(p[i]["端口号"])
+        # sheet['C' + str(i + 2)] = str(p[i]["工作路径"])
+        # sheet['D' + str(i + 2)] = str(p[i]["程序名称"])
+    # wb.save(r"D:\123.xlsx")
 
 
 
 if __name__ == '__main__':
     WritetoExcel()
-    wb.save(r"D:\123.xlsx")
