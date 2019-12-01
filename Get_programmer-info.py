@@ -31,7 +31,7 @@ def filterList():
             newList.append(a)
     return newList
 
-# 使用format格式化，出现$NF无法识别,待解决
+# 使用format格式化
 def filterprocess(PID):
     command = "pwdx {PID}".format(PID=PID)  + "|" + "awk '{print $NF}'"
     workdir = getComStr(command)
@@ -39,7 +39,7 @@ def filterprocess(PID):
 
 def main():
     netInfo = filterList()
-    json_data = "{\n" + "\t" + '"data":[' + "\n"
+    json_data = '[' + "\n"
     for net in netInfo:
         workdir = filterprocess(net[1])
         if net != netInfo[-1]:
