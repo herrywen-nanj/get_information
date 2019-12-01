@@ -1,0 +1,42 @@
+# 参考 https://www.jianshu.com/p/5d834b203e82
+# -*- coding: UTF-8 -*-
+import openpyxl
+wb = openpyxl.Workbook()  #初始化
+sheet = wb["Sheet"]
+p = [{"私网地址": "192.168.5.3" ,"端口号": '9870',"工作路径": '/export/home',"程序名称":"IPBOSS-exec"},{"私网地址": "192.168.5.31", "端口号": '9387', "工作路径": '/export/home/op',"程序名称":"IPBOSS-qx"}]
+def GetNumber():
+    len_p = len(p)
+    for length in p:
+        length = len(length)
+    return len_p,length
+# num = GetNumber()
+
+# def JsonContent(dict_file):
+#     for content in dict_file:
+#         return content
+
+# 设置标题
+sheet['A1'] = "私网地址"
+sheet['B1'] = "端口号"
+sheet["C1"] = "工作路径"
+sheet["D1"] = "程序名称"
+
+
+def WritetoExcel():
+    len_p,num = GetNumber()
+    for column in range(len_p):
+        # print(p[column]["A"])
+        sheet['A' + str(column + 2)] = str(p[column]["私网地址"])
+        sheet['B' + str(column + 2)] = str(p[column]["端口号"])
+        sheet['C' + str(column + 2)] = str(p[column]["工作路径"])
+        sheet['C' + str(column + 2)] = str(p[column]["程序名称"])
+        # for content in p:
+        #     sheet.cell(row=row,column=1).value = content["A"]
+        #     sheet.cell(row=row,column=2).value = content["B"]
+        #     sheet.cell(row=row,column=3).value = content["C"]
+
+
+
+if __name__ == '__main__':
+    WritetoExcel()
+    wb.save(r"D:\123.xlsx")
