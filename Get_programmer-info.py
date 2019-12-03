@@ -1,6 +1,16 @@
 #!/usr/bin/python
 #coding=utf-8
 import commands
+# python3中使用subprocess替代commands模块,如果你使用python3请打开注释
+# import subprocess
+#def getComstr(command):
+#    try:
+#        proStr = subprocess.getoutput(command)
+#    except:
+#        print "command {0} execute failed,exit".format(command)
+#    return proStr
+
+
 
 def getComStr(comand):
     try:
