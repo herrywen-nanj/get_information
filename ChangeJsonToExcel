@@ -1,49 +1,85 @@
 # 参考 https://www.jianshu.com/p/5d834b203e82
 # -*- coding: UTF-8 -*-
-import openpyxl
-wb = openpyxl.Workbook()  #初始化
-sheet = wb["Sheet"]
-p = [{"私网地址": "192.168.5.3" ,"端口号": '9870',"工作路径": '/export/home',"程序名称":"IPBOSS-exec"},{"私网地址": "192.168.5.31", "端口号": '9387', "工作路径": '/export/home/op',"程序名称":"IPBOSS-qx"}]
-def GetNumber():
-    len_p = len(p)
-    for length in p:
-        length = len(length)
-    return len_p,length
-# num = GetNumber()
+import openpyxl,json,os,re
 
-# def JsonContent(dict_file):
-#     for content in dict_file:
-#         return content
+# 遍历目录下所有文件，返回完成文件路径和文件名
+def GetSourceJsonfileList(dir):
+    filelistpath = []
+    for home, dirs, files in os.walk(dir):
+        for filename in files:
+            fullname = os.path.join(home, filename)
+            filelistpath.append(fullname)
+    return filelistpath,files
+
+
+
+
+# 解析为IP地址并储存至内存
+def GetIpfromWorkDir(dir):
+    IpList = []
+    filelistpath,files = GetSourceJsonfileList(dir)
+    # 规定正则表达式
+    ss = re.compile(r'((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){3}(1\d\d|2[0-4]\d|25[0-5]|[1-9]\d|\d)')
+    for IP in files:
+        IPa = ss.search(IP).group()
+        IpList.append(IPa)
+    return IpList
+
+
+# 格式化为json文件
+def readfile(filepath):
+    with open(filepath, 'r',encoding='utf-8') as fileobject:
+        json_data = fileobject.read()
+        if len(json_data) > 0:
+            json_datas = json.loads(json_data)
+        else:
+            json_datas = {}
+        return json_datas
+
+
+# def GetNumber(dir):
+#     IpList = GetIpfromWorkDir(dir)
+#     for length_IpList in IpList:
+#         length = len(length)
+#     return len_p,length
 
 # 设置标题
-sheet['A1'] = "私网地址"
-sheet['B1'] = "端口号"
-sheet["C1"] = "工作路径"
-sheet["D1"] = "程序名称"
+# sheet['A1'] = "私网地址"
+# sheet['B1'] = "端口号"
+# sheet["C1"] = "工作路径"
+# sheet["D1"] = "程序名称"
 
-
-def WritetoExcel():
-    len_p,num = GetNumber()
-    # print(len_p)
-    # print(num)
-    index = 0
-    # for j in range(len_p):
-    for j in range(len_p):
-        sheet['A' + str(j + 2)] = str(p[j]["私网地址"])
-        sheet['B' + str(j + 2)] = str(p[j]["端口号"])
-        sheet['C' + str(j + 2)] = str(p[j]["工作路径"])
-        sheet['D' + str(j + 2)] = str(p[j]["程序名称"])
-        wb.save(r"D:\123.xlsx")
-
-        # print(i)
-        # print(p[i-1]["私网地址"])
-        # sheet['A' + str(i + 2)] = str(p[i]["私网地址"])
-        # sheet['B' + str(i + 2)] = str(p[i]["端口号"])
-        # sheet['C' + str(i + 2)] = str(p[i]["工作路径"])
-        # sheet['D' + str(i + 2)] = str(p[i]["程序名称"])
-    # wb.save(r"D:\123.xlsx")
-
+def WritetoExcel(dir):
+    # 循环获取每个文件夹下的总个数
+    wb = openpyxl.load_workbook(r'C:\Users\13585\Desktop\fsdownload\package-mariadb\表2_ITMS业务部署信息 - 副本.xlsx')
+    sheet = wb["连云港-192.168.152.228"]
+    sheet['A1'] = "私网地址"
+    sheet['B1'] = "端口号"
+    sheet["C1"] = "工作路径"
+    sheet["D1"] = "程序名称"
+    length_IpList,filename = GetSourceJsonfileList(dir)
+    # 根据文件夹的总个数进行循环
+    for i in range(len(length_IpList)):
+        # Max_Row = sheet.max_row + i
+        # print(Max_Row)
+        # 拿到文件的IP地址
+        IP = GetIpfromWorkDir(dir)
+        real_ip = IP[i]
+        # 拿到文件内容
+        json_data = readfile(length_IpList[i])
+        # try:
+        # 根据文件内容中字典的个数进行循环，这里的字典个数理解成要写多少行数据
+        for p in range(len(json_data)):
+            # 获取最大行数+1，并在此行的第一列，第五列，第四列，第二列循环插入字典中对应的值
+            sheet.cell(sheet.max_row+1,1,value=real_ip)
+            sheet.cell(sheet.max_row,5,value=str(json_data[p]["{#PPORT}"]))
+            # if json_data[p]["{#ProcessStartCommand}"] != None or
+            sheet.cell(sheet.max_row,4,value=str(json_data[p]["{#ProcessStartCommand}"]))
+            sheet.cell(sheet.max_row,2,value=str(json_data[p]["{#PNAME}"]))
+        # except KeyError:
+        #     pass
+    wb.save(r"D:\1234.xlsx")
 
 
 if __name__ == '__main__':
-    WritetoExcel()
+    WritetoExcel(r'D:\综合\智能网管-1跳转')
