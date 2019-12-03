@@ -50,6 +50,7 @@ def GetStartProcessCommand(PID):
     ProcessCommand = " ".join(tmplist1[10:])
     return ProcessCommand
 
+# 将数据拼接成json格式
 def InformationChangeJson():
     netInfo = filterList()
     json_data = "[" + "\n"
@@ -65,7 +66,7 @@ def InformationChangeJson():
             json_data = json_data + "\t\t" + "{" + "\n" + "\t\t\t" + '"{#PPORT}":"' + str(net[0]) + "\",\n" + "\t\t\t" + '"{#PROGRAMWORKPATH}":"' + workdir + "\",\n" + "\t\t\t" + '"{#ProcessStartCommand}":"' + ProcessCommand + "\",\n" + "\t\t\t" + '"{#PNAME}":"' + str(net[2]) + "\"}]}"
     return json_data
 
-# 获取当前网卡IP地址
+# 获取当前网卡IP地址，注意需要查看当前网卡名称，做相应修改
 def GetNetworkIp():
     command = "ifconfig ens32 | grep -w inet | awk '{print $2}'"
     networkip = getComStr(command)
